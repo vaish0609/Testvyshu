@@ -1,0 +1,131 @@
+{
+	"name": "Buildapppowerbi_standar_calendar",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BuilappPRODreplica",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": [
+			{
+				"name": "factory_id",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "factory",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "calendar_id",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "description",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "line_name",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "machine_name",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "machine_zone",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "task_tpye",
+				"type": "char",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "user_name",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "minutes_duration",
+				"type": "bigint",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "status",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 31
+			},
+			{
+				"name": "is_critical",
+				"type": "tinyint",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "scheduled_date",
+				"type": "datetime",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "scheduled_shift",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "completed_date",
+				"type": "date",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "completed_comment",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "completed_shift",
+				"type": "varchar",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "last_modified",
+				"type": "datetime",
+				"precision": 0,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"tableName": "powerbi_standar_calendar"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,11 @@
+{
+	"name": "ls_pmcs_akv",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvasgrassdevaz1taznv102.vault.azure.net/"
+		},
+		"annotations": []
+	}
+}

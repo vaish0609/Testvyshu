@@ -1,0 +1,17 @@
+{
+	"name": "ADB_ADLS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "@{concat('https://',linkedService().storage_account_name,'.dfs.core.windows.net')}"
+		},
+		"parameters": {
+			"storage_account_name": {
+				"type": "string",
+				"defaultValue": "stasgrassdevaz1taznv1002"
+			}
+		},
+		"annotations": []
+	}
+}

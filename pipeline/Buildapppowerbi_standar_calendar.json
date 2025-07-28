@@ -1,0 +1,204 @@
+{
+	"name": "Buildapppowerbi_standar_calendar",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1_sbo_calender",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.tableList",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LookupOldWaterMarkActivity_copy1",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "select * from watermarktable where TableName  =  '@{item().Table_DestinationName}'",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "Watermark_Buildapp_cloud",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "LookupNewWaterMarkActivity_copy1",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureMySqlSource",
+									"query": {
+										"value": "select MAX(@{item().WaterMark_Column}) as NewWatermarkvalue from @{item().Table_Name}",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00"
+								},
+								"dataset": {
+									"referenceName": "Buildapp_Prod_MYSQLDB",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "Copy data1_copy1",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupOldWaterMarkActivity_copy1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LookupNewWaterMarkActivity_copy1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.23:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureMySqlSource",
+									"query": {
+										"value": "select * from @{item().Table_Name} where @{item().WaterMark_Column} > '@{activity('LookupOldWaterMarkActivity_copy1').output.firstRow.WatermarkValue}' and @{item().WaterMark_Column} <= '@{activity('LookupNewWaterMarkActivity_copy1').output.firstRow. NewWatermarkvalue}'",
+										"type": "Expression"
+									},
+									"queryTimeout": "12:00:00"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"writeBehavior": "upsert",
+									"upsertSettings": {
+										"useTempDB": true,
+										"keys": [
+											"calendar_id"
+										]
+									},
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": true
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Buildapppowerbi_standar_calendar",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "powerbi_standar_calendarSql",
+									"type": "DatasetReference"
+								}
+							]
+						},
+						{
+							"name": "Storedprocedureto_update_watermarktable_copy1",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Copy data1_copy1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[usp_write_watermark]",
+								"storedProcedureParameters": {
+									"TableName": {
+										"value": {
+											"value": "@activity('LookupOldWaterMarkActivity_copy1').output.firstRow.TableName",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"LastModifiedtime": {
+										"value": {
+											"value": "@activity('LookupNewWaterMarkActivity_copy1').output.firstRow.NewWaterMarkvalue",
+											"type": "Expression"
+										},
+										"type": "Datetime"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "BuildappPowerBiDB",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tableList": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"Table_Name": "powerbi_standar_calendar",
+						"Table_DestinationName": "`powerbi_standar_calendar`",
+						"WaterMark_Column": "last_modified",
+						"Table_DestinationSchemaName": "dbo"
+					}
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-02T07:29:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

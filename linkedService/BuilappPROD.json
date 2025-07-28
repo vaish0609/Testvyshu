@@ -1,0 +1,12 @@
+{
+	"name": "BuilappPROD",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureMySql",
+		"typeProperties": {
+			"connectionString": "server=bienobuildappprod.mysql.database.azure.com;port=3306;database=buildapp;uid=buildapp_pipeline;sslmode=1;usesystemtruststore=0",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDM4MjRDMDUxLUYyMzYtNDZCNS05QUY1LUMyQzY1RTgyMDY1MV9hZmE3MmI0Yi04MGVjLTQwZTctYTU3My00Mjc4OGY4NmYyZDEiDQp9"
+		}
+	}
+}

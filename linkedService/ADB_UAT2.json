@@ -1,0 +1,24 @@
+{
+	"name": "ADB_UAT2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-3157833405211586.6.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_pmcs_akv",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "sva-all-rsit-svc-dbks"
+			},
+			"existingClusterId": "0311-065932-y8ne234v"
+		},
+		"connectVia": {
+			"referenceName": "irt-taznv1-ifrs17cit",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "vyshusecondADF",
+	"location": "centralus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7a405733-9e81-46f2-8741-628872f95f4f",
+		"tenantId": "16b3c013-d300-468d-ac64-7eda0820b6d3"
+	}
+}

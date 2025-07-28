@@ -1,0 +1,7 @@
+{
+	"name": "irt-taznv1-ifrs17cit",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "IFRS17 CIT Self-hosted IR"
+	}
+}

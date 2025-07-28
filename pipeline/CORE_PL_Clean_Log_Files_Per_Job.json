@@ -1,0 +1,446 @@
+{
+	"name": "CORE_PL_Clean_Log_Files_Per_Job",
+	"properties": {
+		"activities": [
+			{
+				"name": "Connect to AKV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://kvasgrassdevaz1taznv102.vault.azure.net/secrets/all-rsit-svc-dbks/b6e37e6738674a4485ce680cfaa6dd3e?api-version=7.0",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Store PAT",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Connect to AKV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PAT",
+					"value": {
+						"value": "@activity('Connect to AKV').output.value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get Base Parameters",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Store PAT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',variables('PAT'))",
+							"type": "Expression"
+						}
+					},
+					"url": {
+						"value": "@concat(pipeline().parameters.ADB_URL,'/api/2.1/jobs/get?job_id=',pipeline().parameters.Job_ID)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set LBU",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Base Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LBU",
+					"value": {
+						"value": "@activity('Get Base Parameters').output.settings.tasks[0].notebook_task.base_parameters.LBUName",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set File_Type",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Base Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "File_Type",
+					"value": {
+						"value": "@activity('Get Base Parameters').output.settings.tasks[0].notebook_task.base_parameters.FileType",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Output_Group",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Base Parameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Output_Group",
+					"value": {
+						"value": "@activity('Get Base Parameters').output.settings.tasks[0].notebook_task.base_parameters.OutputGroup",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get List of Log Folders",
+				"type": "GetMetadata",
+				"dependsOn": [
+					{
+						"activity": "Set LBU",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set File_Type",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Output_Group",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "TRN_DS_BIN",
+						"type": "DatasetReference",
+						"parameters": {
+							"lbu_blob_folder": {
+								"value": "@concat(pipeline().parameters.Log_Path,variables('LBU'),'/',variables('Output_Group'))",
+								"type": "Expression"
+							},
+							"lbu_blob_container": {
+								"value": "@pipeline().parameters.Container",
+								"type": "Expression"
+							},
+							"lbu_storage_name": {
+								"value": "@pipeline().parameters.Storage_Name",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
+					}
+				}
+			},
+			{
+				"name": "For Each Log Folder",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get List of Log Folders",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get List of Log Folders').output.childItems",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Get List of Log Files",
+							"type": "GetMetadata",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "TRN_DS_BIN",
+									"type": "DatasetReference",
+									"parameters": {
+										"lbu_blob_folder": {
+											"value": "@concat(pipeline().parameters.Log_Path,variables('LBU'),'/',variables('Output_Group'),'/',item().name)",
+											"type": "Expression"
+										},
+										"lbu_blob_container": {
+											"value": "@pipeline().parameters.Container",
+											"type": "Expression"
+										},
+										"lbu_storage_name": {
+											"value": "@pipeline().parameters.Storage_Name",
+											"type": "Expression"
+										}
+									}
+								},
+								"fieldList": [
+									"childItems"
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							}
+						},
+						{
+							"name": "If Log File Present",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Get List of Log Files",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@not(empty(activity('Get List of Log Files').output.childItems))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Delete Old Log Files",
+										"type": "Delete",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataset": {
+												"referenceName": "TRN_DS_BIN",
+												"type": "DatasetReference",
+												"parameters": {
+													"lbu_blob_folder": {
+														"value": "@concat(pipeline().parameters.Log_Path,variables('LBU'),'/',variables('Output_Group'),'/',item().name)",
+														"type": "Expression"
+													},
+													"lbu_blob_container": {
+														"value": "@pipeline().parameters.Container",
+														"type": "Expression"
+													},
+													"lbu_storage_name": {
+														"value": "@pipeline().parameters.Storage_Name",
+														"type": "Expression"
+													}
+												}
+											},
+											"enableLogging": false,
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true,
+												"enablePartitionDiscovery": false
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Clean Delta and Summary Logs",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Set LBU",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set Output_Group",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set File_Type",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@pipeline().parameters.Notebook",
+						"type": "Expression"
+					},
+					"baseParameters": {
+						"LBUName": {
+							"value": "@variables('LBU')",
+							"type": "Expression"
+						},
+						"FileType": {
+							"value": "@variables('File_Type')",
+							"type": "Expression"
+						},
+						"OutputGroup": {
+							"value": "@variables('Output_Group')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ADB_UAT2",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"Log_Path": {
+				"type": "string",
+				"defaultValue": "SrcFiles/CP/PMCS/DQC_LOGS/"
+			},
+			"Container": {
+				"type": "string",
+				"defaultValue": "core"
+			},
+			"ADB_URL": {
+				"type": "string",
+				"defaultValue": "https://adb-3157833405211586.6.azuredatabricks.net"
+			},
+			"Job_ID": {
+				"type": "string"
+			},
+			"Notebook": {
+				"type": "string",
+				"defaultValue": "/Shared/CONNECTION/Clean_Delta_Summary_Logs"
+			},
+			"Storage_Name": {
+				"type": "string",
+				"defaultValue": "stasgrassdevaz1taznv1002"
+			}
+		},
+		"variables": {
+			"PAT": {
+				"type": "String"
+			},
+			"LBU": {
+				"type": "String"
+			},
+			"File_Type": {
+				"type": "String"
+			},
+			"Output_Group": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Databricks Jobs/CORE_PROPHET_DQC"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-10T12:47:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

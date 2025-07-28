@@ -1,0 +1,42 @@
+{
+	"name": "TRN_DS_BIN",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADB_ADLS",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"storage_account_name": {
+					"value": "@dataset().lbu_storage_name",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"lbu_blob_folder": {
+				"type": "string"
+			},
+			"lbu_blob_container": {
+				"type": "string"
+			},
+			"lbu_storage_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().lbu_blob_folder",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().lbu_blob_container",
+					"type": "Expression"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

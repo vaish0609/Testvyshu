@@ -1,0 +1,24 @@
+{
+	"name": "AzureDatabricks2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-904483172991668.8.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "tokenadf"
+			},
+			"newClusterNodeType": "Standard_DS4_v2",
+			"newClusterNumOfWorker": "1",
+			"newClusterVersion": "10.4.x-scala2.12",
+			"clusterOption": "Fixed",
+			"newClusterInitScripts": []
+		}
+	}
+}

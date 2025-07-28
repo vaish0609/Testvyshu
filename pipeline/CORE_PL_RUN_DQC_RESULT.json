@@ -1,0 +1,257 @@
+{
+	"name": "CORE_PL_RUN_DQC_RESULT",
+	"properties": {
+		"description": "This job will Delete old logs and run the jobs as per the given ID",
+		"activities": [
+			{
+				"name": "Force Fail",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "Get Job Run Details",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": "Job failed",
+					"errorCode": "0"
+				}
+			},
+			{
+				"name": "Save timestamp",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Run DQC Job",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "gettime",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Connect to AKV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "GET",
+					"url": "https://kvasgrassdevaz1taznv102.vault.azure.net/secrets/all-rsit-svc-dbks/b6e37e6738674a4485ce680cfaa6dd3e?api-version=7.0",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Store PAT",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Connect to AKV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PAT",
+					"value": {
+						"value": "@activity('Connect to AKV').output.value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Run DQC Job",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Delete Logs",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',variables('PAT'))",
+							"type": "Expression"
+						}
+					},
+					"url": {
+						"value": "@concat(pipeline().parameters.ADB_URL,'/api/2.1/jobs/run-now')",
+						"type": "Expression"
+					},
+					"body": {
+						"value": "@concat('{\"job_id\":', pipeline().parameters.Job_ID, '}')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Delete Logs",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Store PAT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CORE_PL_Clean_Log_Files_Per_Job",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"Container": {
+							"value": "@pipeline().parameters.Container",
+							"type": "Expression"
+						},
+						"Job_ID": {
+							"value": "@pipeline().parameters.Job_ID",
+							"type": "Expression"
+						},
+						"Storage_Name": {
+							"value": "@pipeline().parameters.Storage_Name",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Get Job Run Details",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Save timestamp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CORE_PL_Get_Databricks_Job_Status",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"Job_ID": {
+							"value": "@pipeline().parameters.Job_ID",
+							"type": "Expression"
+						},
+						"ADB_URL": {
+							"value": "@pipeline().parameters.ADB_URL",
+							"type": "Expression"
+						},
+						"Pipeline": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"LBU": {
+							"value": "@pipeline().parameters.LBU",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"Job_ID": {
+				"type": "string",
+				"defaultValue": "12345"
+			},
+			"ADB_URL": {
+				"type": "string",
+				"defaultValue": "https://adb-3157833405211586.6.azuredatabricks.net"
+			},
+			"LBU": {
+				"type": "string",
+				"defaultValue": "TH"
+			},
+			"Schema": {
+				"type": "string",
+				"defaultValue": "AUDIT_CORE"
+			},
+			"Container": {
+				"type": "string",
+				"defaultValue": "core"
+			},
+			"Path": {
+				"type": "string",
+				"defaultValue": "/SrcFiles/CP/Prophet/Prophet_DQC_Status_Details/"
+			},
+			"Storage_Name": {
+				"type": "string",
+				"defaultValue": "stasgrassdevaz1taznv1002"
+			}
+		},
+		"variables": {
+			"status": {
+				"type": "String",
+				"defaultValue": "NULL"
+			},
+			"gettime": {
+				"type": "String"
+			},
+			"PAT": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Databricks Jobs/CORE_PROPHET_DQC"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-07-10T12:47:12Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

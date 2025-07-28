@@ -1,0 +1,13 @@
+{
+	"name": "Buildapp_Prod_MYSQLDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BuilappPROD",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,17 @@
+{
+	"name": "Sftp1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Sftp",
+		"typeProperties": {
+			"host": "vyshusecondstorage.blob.core.windows.net",
+			"port": 22,
+			"skipHostKeyValidation": false,
+			"hostKeyFingerprint": "ecdsa-sha2-nistp256 256 a7:21:cb:e0:29:e1:c9:05:0b:ba:a6:bb:3e:04:72:22",
+			"authenticationType": "SshPublicKey",
+			"userName": "vyshusecondstorage.adfdemo2.vyshu",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDQ3RkQ3MkI3LTBBNkYtNDBCNC05NjM4LTg5MEIwQTk3MTNBNF84MWUwNzU4NC1lNTAxLTQxYmEtYjBkOS1mZWI0NTFhM2U4YjEiDQp9"
+		}
+	}
+}

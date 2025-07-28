@@ -1,0 +1,102 @@
+{
+	"name": "powerbi_standar_calendarSql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BuildappPowerBiDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "factory_id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "factory",
+				"type": "nvarchar"
+			},
+			{
+				"name": "description",
+				"type": "nvarchar"
+			},
+			{
+				"name": "line_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "machine_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "machine_zone",
+				"type": "nvarchar"
+			},
+			{
+				"name": "task_tpye",
+				"type": "char"
+			},
+			{
+				"name": "user_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "minutes_duration",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "status",
+				"type": "varchar"
+			},
+			{
+				"name": "is_critical",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "scheduled_date",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "scheduled_shift",
+				"type": "nvarchar"
+			},
+			{
+				"name": "completed_date",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "completed_comment",
+				"type": "nvarchar"
+			},
+			{
+				"name": "completed_shift",
+				"type": "nvarchar"
+			},
+			{
+				"name": "id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "last_modified",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "calendar_id",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "`powerbi_standar_calendar`"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

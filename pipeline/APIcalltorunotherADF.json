@@ -1,0 +1,31 @@
+{
+	"name": "APIcalltorunotherADF",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://management.azure.com/subscriptions/MCAPS-Support-REQ-115559-2025-v-shvaishnav/resourceGroups/TestEnvironment/providers/Microsoft.DataFactory/factories/Vyshnavifirstadf/pipelines/APIcalltorunfromotherADF/createRun?api-version=2018-06-01",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://management.azure.com/"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2025-04-12T14:13:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
