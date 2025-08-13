@@ -2,12 +2,16 @@
 	"name": "DS_AzureSqlDatabase",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AzureSqlDatabase",
+			"referenceName": "AzureSqlDatabase1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": []
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "tbl_employee"
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
