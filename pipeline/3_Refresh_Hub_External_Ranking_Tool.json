@@ -1,0 +1,36 @@
+{
+	"name": "3_Refresh_Hub_External_Ranking_Tool",
+	"properties": {
+		"activities": [
+			{
+				"name": "Hub-External-Ranking-Tool",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"url": "https://prod-42.westeurope.logic.azure.com:443/workflows/c097cf017ba54592b5035b00959eb6ad/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=HqH70unFbfLGMmKini6wyKGfdR2OtQQS7rApXcWewCc",
+					"body": {
+						"CommitMode": "transactional",
+						"MaxParallelism": 10,
+						"RetryCount": 2,
+						"Type": "Full"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-12-04T13:03:46Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

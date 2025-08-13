@@ -1,0 +1,24 @@
+{
+	"name": "DS_AzureSFTP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SftpConnexion",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "FileShare",
+		"typeProperties": {
+			"format": {
+				"type": "TextFormat",
+				"columnDelimiter": ",",
+				"rowDelimiter": "",
+				"treatEmptyAsNull": true,
+				"skipLineCount": 0,
+				"firstRowAsHeader": false
+			},
+			"fileName": "*.csv",
+			"folderPath": "/extract-data"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

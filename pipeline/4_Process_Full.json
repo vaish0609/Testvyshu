@@ -1,0 +1,981 @@
+{
+	"name": "4_Process_Full",
+	"properties": {
+		"activities": [
+			{
+				"name": "0_Import_Data_DTS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AZURE_trace_START",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_Import_Data_DTS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "1_Import_Data_Calendar",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1_Import_Data_SellIn",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1_Import_Data_Calendar",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_SellIn",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_AFS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_SellIn",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_SellOut",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_AFS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_SellOut",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_AFS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1_Import_Data_Budget",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "1_Import_Data_Calendar",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "1_Import_Data_Stock",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "1_Import_Data_SellOut",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_AFS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_Stock",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_AFS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_Stock",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_CEY",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_SellIn",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_CEY",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Lookup_NewTrace",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[AZURE_NewTrace]",
+						"storedProcedureParameters": {
+							"UPROC": {
+								"type": "String",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							}
+						},
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_AzureSqlDatabase",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "AZURE_trace_START",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Lookup_NewTrace",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[AZURE_trace]",
+					"storedProcedureParameters": {
+						"COMMENTAIRE": {
+							"value": "Start process",
+							"type": "String"
+						},
+						"DT_DEBUT": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"DT_OPE": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ID": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"NB_LIG_ERR": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"UPROC": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "AZURE_trace_END_SQL",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "2_Process_Stock",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "2_Process_SellOut",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "2_Process_CEY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "2_Process_Budget",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[AZURE_trace]",
+					"storedProcedureParameters": {
+						"COMMENTAIRE": {
+							"value": "End of SQL process",
+							"type": "String"
+						},
+						"DT_DEBUT": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"DT_OPE": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ID": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"NB_LIG_ERR": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"UPROC": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "2_Process_Budget",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_AFS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_Budget",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "1_Import_Data_SellOut",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "0_Import_Data_DTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1_Import_Data_SellOut",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "1_Import_Data_Stock",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1_Import_Data_SellIn",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1_Import_Data_Stock",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "1_Import_Data_SellIn",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "0_Import_Data_AFS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "0_Import_Data_CEY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1_Import_Data_SellIn",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "1_Import_Data_Budget",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1_Import_Data_SellIn",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "1_Import_Data_Budget",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_RLR",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1_Import_Data_SellOut",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "0_Import_Data_RLR",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_RLR",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "2_Process_SellOut_RLR",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_RLR",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_Process_SellOut_RLR",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "3_RALoyalty_RefreshCube",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2_Process_SellOut_RLR",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "3_RALoyalty_RefreshCube",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "AZURE_trace_END_RLR",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "3_RALoyalty_RefreshCube",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[AZURE_trace]",
+					"storedProcedureParameters": {
+						"COMMENTAIRE": {
+							"value": "End of RLR process",
+							"type": "String"
+						},
+						"DT_DEBUT": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"DT_OPE": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ID": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"NB_LIG_ERR": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"UPROC": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "3_Refresh_AFS_TabularCube_PowerBI_Clinic",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AZURE_trace_END_SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "3_Refresh_AFS_TabularCube_PowerBI_Clinic",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "AZURE_trace_END",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "3_Refresh_AFS_TabularCube_PowerBI_Clinic",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[AZURE_trace]",
+					"storedProcedureParameters": {
+						"COMMENTAIRE": {
+							"value": "End process Buce",
+							"type": "String"
+						},
+						"DT_DEBUT": {
+							"value": {
+								"value": "@utcnow()",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"DT_OPE": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"ID": {
+							"value": {
+								"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"NB_LIG_ERR": {
+							"value": "0",
+							"type": "Int32"
+						},
+						"UPROC": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "0_Import_Data_RLR",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "0_Import_Data_DTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_Import_Data_RLR",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "0_Import_Data_CEY",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "0_Import_Data_DTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_Import_Data_CEY",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "0_Import_Data_AFS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "0_Import_Data_DTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_Import_Data_AFS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ID": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.ID",
+							"type": "Expression"
+						},
+						"DT_OPE": {
+							"value": "@activity('Lookup_NewTrace').output.firstRow.DT_OPE",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "3_Refresh_Hub_External_Ranking_Tool",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AZURE_trace_END_SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "3_Refresh_Hub_External_Ranking_Tool",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-12-04T13:09:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
