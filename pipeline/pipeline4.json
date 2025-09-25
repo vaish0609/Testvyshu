@@ -29,7 +29,11 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"message": "failed",
+					"errorCode": "404"
+				}
 			}
 		],
 		"annotations": []
