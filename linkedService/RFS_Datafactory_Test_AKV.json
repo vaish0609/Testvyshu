@@ -1,0 +1,11 @@
+{
+	"name": "RFS_Datafactory_Test_AKV",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://RFS-Datafactory-Test-AKV.vault.azure.net/"
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"name": "10-20-30-95-TEST-IR",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/04b51b78-7c1c-4798-9385-99f485d3e5ce/resourcegroups/RBLFINSERVE-DATAWAREHOUSE-PRD/providers/Microsoft.DataFactory/factories/rblprddatafactory/integrationruntimes/10-20-30-95-IR-new",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

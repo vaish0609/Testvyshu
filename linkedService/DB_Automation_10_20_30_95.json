@@ -1,0 +1,26 @@
+{
+	"name": "DB_Automation_10_20_30_95",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "RFS_Datafactory_Test_AKV",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "RFS-UAM-DB-Automation-Secret",
+				"secretVersion": "9cda52b9f9134b6da3416773d4a689b9"
+			},
+			"alwaysEncryptedSettings": {
+				"alwaysEncryptedAkvAuthType": "ManagedIdentity"
+			}
+		},
+		"connectVia": {
+			"referenceName": "10-20-30-95-TEST-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

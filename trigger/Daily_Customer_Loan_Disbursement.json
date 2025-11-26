@@ -1,0 +1,24 @@
+{
+	"name": "Daily_Customer_Loan_Disbursement",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "CustomerLoanDisbursement_95_TO_Rawzone",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2024-12-25T08:00:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

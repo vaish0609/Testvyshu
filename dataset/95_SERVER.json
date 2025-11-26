@@ -1,0 +1,26 @@
+{
+	"name": "95_SERVER",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DB_Automation_10_20_30_95",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "LoanAccountNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CustomerNumber",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CustomerLoanDisbursementData"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
