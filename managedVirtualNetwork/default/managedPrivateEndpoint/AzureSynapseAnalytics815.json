@@ -1,0 +1,7 @@
+{
+	"name": "AzureSynapseAnalytics815",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/eb6eb6b8-2768-4bee-bf31-23e931432323/resourceGroups/TestEnvironment/providers/Microsoft.Synapse/workspaces/vyshu8465",
+		"groupId": "sql"
+	}
+}
