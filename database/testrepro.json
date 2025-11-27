@@ -1,0 +1,25 @@
+{
+	"name": "testrepro",
+	"properties": {
+		"Name": "testrepro",
+		"EntityType": "DATABASE",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"Properties": {
+			"IsSyMSCDMDatabase": true
+		},
+		"Source": {
+			"Provider": "ADLS",
+			"Location": "abfss://74df4cd0-d4a0-4627-b887-bf7e5c59e2d3@vyshusecondstorage.dfs.core.windows.net/testrepro",
+			"Properties": {
+				"FormatType": "csv",
+				"LinkedServiceName": "vyshufirstsynapse-WorkspaceDefaultStorage"
+			}
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "84abf601-bf68-43d9-a675-0777a3830629"
+	},
+	"type": "DATABASE"
+}
