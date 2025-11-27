@@ -1,0 +1,123 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "vyshufirstsynapse"
+		},
+		"AzureDataLakeStorage1test_accountKey": {
+			"value": ""
+		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"BuilappPROD_connectionString": {
+			"value": ""
+		},
+		"BuilappPRODreplica_connectionString": {
+			"value": ""
+		},
+		"BuildappPowerBiDB_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=bieno-df-qa-sqlsrv-01.database.windows.net;Initial Catalog=BuildappSqlDB"
+		},
+		"LS_AzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"LS_AzureSqlDatabase_connectionString": {
+			"value": ""
+		},
+		"Sftp1_privateKeyContent": {
+			"value": ""
+		},
+		"Sftp1_passPhrase": {
+			"value": ""
+		},
+		"SftpConnexion_privateKeyContent": {
+			"value": ""
+		},
+		"SftpConnexion_passPhrase": {
+			"value": ""
+		},
+		"vyshufirstsynapse-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:vyshufirstsynapse.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"DS_AzureBlobStorage_properties_typeProperties_fileName": {
+			"value": ""
+		},
+		"DS_AzureBlobStorage_properties_typeProperties_folderPath": {
+			"value": "datastage"
+		},
+		"DS_AzureSFTP_properties_typeProperties_fileName": {
+			"value": "*.csv"
+		},
+		"DS_AzureSFTP_properties_typeProperties_folderPath": {
+			"value": "/extract-data"
+		},
+		"ADB_ADLS_properties_typeProperties_url": {
+			"value": "@{concat('https://',linkedService().storage_account_name,'.dfs.core.windows.net')}"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://vyshusecondstorage.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage1test_properties_typeProperties_url": {
+			"value": "https://rflazudwdev.dfs.core.windows.net/"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://hgubjjhb.vault.azure.net/"
+		},
+		"AzureKeyVault2_properties_typeProperties_baseUrl": {
+			"value": "https://vyshuakv.vault.azure.net/"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "vyshusecondserver.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "seconddb"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "Vaishudeshoju"
+		},
+		"AzureSynapseAnalyticstest_properties_typeProperties_connectionString_secretName": {
+			"value": "synapsetest-secret"
+		},
+		"DB_Automation_10_20_30_95_properties_typeProperties_connectionString_secretName": {
+			"value": "RFS-UAM-DB-Automation-Secret"
+		},
+		"RFS_Datafactory_Test_AKV_properties_typeProperties_baseUrl": {
+			"value": "https://RFS-Datafactory-Test-AKV.vault.azure.net/"
+		},
+		"Sftp1_properties_typeProperties_host": {
+			"value": "vyshusecondstorage.blob.core.windows.net"
+		},
+		"Sftp1_properties_typeProperties_hostKeyFingerprint": {
+			"value": "ecdsa-sha2-nistp256 256 a7:21:cb:e0:29:e1:c9:05:0b:ba:a6:bb:3e:04:72:22"
+		},
+		"Sftp1_properties_typeProperties_userName": {
+			"value": "vyshusecondstorage.adfdemo2.vyshu"
+		},
+		"SftpConnexion_properties_typeProperties_host": {
+			"value": "65.52.141.113"
+		},
+		"SftpConnexion_properties_typeProperties_userName": {
+			"value": "afsSftp"
+		},
+		"ls_pmcs_akv_properties_typeProperties_baseUrl": {
+			"value": "https://kvasgrassdevaz1taznv102.vault.azure.net/"
+		},
+		"testrepro123_properties_typeProperties_connectionString_secretName": {
+			"value": "testrepro"
+		},
+		"vyshufirstsynapse-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://vyshusecondstorage.dfs.core.windows.net"
+		},
+		"10-20-30-95-TEST-IR_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/04b51b78-7c1c-4798-9385-99f485d3e5ce/resourcegroups/RBLFINSERVE-DATAWAREHOUSE-PRD/providers/Microsoft.DataFactory/factories/rblprddatafactory/integrationruntimes/10-20-30-95-IR-new"
+		},
+		"integrationRuntime1_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/eb6eb6b8-2768-4bee-bf31-23e931432323/resourcegroups/TestEnvironment/providers/Microsoft.DataFactory/factories/Vaishnavitestadf/integrationruntimes/SHIRtest"
+		}
+	}
+}
