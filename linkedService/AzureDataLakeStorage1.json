@@ -7,7 +7,7 @@
 			"url": "https://vyshusecondstorage.dfs.core.windows.net/"
 		},
 		"connectVia": {
-			"referenceName": "integrationRuntime3",
+			"referenceName": "integrationRuntime1",
 			"type": "IntegrationRuntimeReference"
 		}
 	},
