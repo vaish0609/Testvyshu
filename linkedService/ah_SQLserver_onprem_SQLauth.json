@@ -1,0 +1,44 @@
+{
+	"name": "ah_SQLserver_onprem_SQLauth",
+	"properties": {
+		"parameters": {
+			"sqlserver": {
+				"type": "string"
+			},
+			"database": {
+				"type": "string"
+			},
+			"user": {
+				"type": "string"
+			},
+			"secret": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "@{linkedService().sqlserver}",
+			"database": "@{linkedService().database}",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "@{linkedService().user}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ah_AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": {
+					"value": "@linkedService().secret",
+					"type": "Expression"
+				}
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRuntimeADFZTLinked",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

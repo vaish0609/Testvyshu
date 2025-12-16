@@ -1,0 +1,44 @@
+{
+	"name": "ds_nav",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ah_SQLserver_onprem_SQLauth",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"sqlserver": {
+					"value": "@dataset().sqlserver",
+					"type": "Expression"
+				},
+				"database": {
+					"value": "@dataset().database",
+					"type": "Expression"
+				},
+				"user": {
+					"value": "@dataset().user",
+					"type": "Expression"
+				},
+				"secret": {
+					"value": "@dataset().secret",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"sqlserver": {
+				"type": "string"
+			},
+			"database": {
+				"type": "string"
+			},
+			"user": {
+				"type": "string"
+			},
+			"secret": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}

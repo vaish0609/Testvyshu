@@ -1,0 +1,34 @@
+{
+	"name": "ds_nav_syn",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ah_AzureSynapse",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"user": "etl_dw",
+				"secret": "etl-dw"
+			}
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().tableName",
+				"type": "Expression"
+			}
+		}
+	}
+}

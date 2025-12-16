@@ -1,0 +1,12 @@
+{
+	"name": "IntegrationRuntimeADFZTLinked",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/a0538bda-0463-420f-8010-3eceed65ff7e/resourcegroups/zt-ca-si-pd-01-euw-rg-synan-prod-01/providers/Microsoft.DataFactory/factories/zt-ca-si-pd-01-euw-synapse-adf-prod-02/integrationruntimes/IntegrationRuntimeADFZT",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

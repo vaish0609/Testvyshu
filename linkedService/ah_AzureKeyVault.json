@@ -1,0 +1,11 @@
+{
+	"name": "ah_AzureKeyVault",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://ztcasinp01euwsynkvtst01.vault.azure.net/"
+		}
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"name": "ah_AzureSynapse",
+	"properties": {
+		"parameters": {
+			"user": {
+				"type": "string",
+				"defaultValue": "etl_dw"
+			},
+			"secret": {
+				"type": "string",
+				"defaultValue": "etl-dw"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"server": "zt-ca-si-np-01-synapse-tst-01.sql.azuresynapse.net",
+			"database": "DWHTST",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "@{linkedService().user}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ah_AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": {
+					"value": "@linkedService().secret",
+					"type": "Expression"
+				}
+			},
+			"pooling": false
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
+}

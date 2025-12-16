@@ -1,0 +1,4470 @@
+{
+	"name": "pp_sql_navtosa",
+	"properties": {
+		"activities": [
+			{
+				"name": "Acc_ Schedule Name",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Acc_ Schedule Name]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_ACC_SCHEDULE_NAME",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"logSettings": {
+						"enableCopyActivityLog": true,
+						"copyActivityLogSettings": {
+							"logLevel": "Warning",
+							"enableReliableLogging": false
+						},
+						"logLocationSettings": {
+							"linkedServiceName": {
+								"referenceName": "ADB_ADLS",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"storage_account_name": "stasgrassdevaz1taznv1002"
+								}
+							}
+						}
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Default Column Layout",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DEFAULT_COLUMN_LAYOUT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Analysis View Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANALYSIS_VIEW_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Export File Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "EXPORT_FILE_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Export File Path",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXPORT_FILE_PATH",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Export Codeunit No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "EXPORT_CODEUNIT_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "P2-22INST1-AGL",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_ACC_SCHEDULE_NAME",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "G_L Entry",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$G_L Entry]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_G_L_ENTRY",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "G_L Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "G_L_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Posting Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "POSTING_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Document Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DOCUMENT_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Document No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DOCUMENT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Bal_ Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BAL_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Global Dimension 1 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOBAL_DIMENSION_1_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Global Dimension 2 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOBAL_DIMENSION_2_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "User ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "USER_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Source Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOURCE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "System-Created Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "SYSTEM_CREATED_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Prior-Year Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "PRIOR_YEAR_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Job No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Quantity",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "QUANTITY",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "VAT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Business Unit Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BUSINESS_UNIT_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Journal Batch Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOURNAL_BATCH_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reason Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REASON_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Posting Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "GEN_POSTING_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Bus_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GEN_BUS_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Prod_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GEN_PROD_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Bal_ Account Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "BAL_ACCOUNT_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Transaction No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TRANSACTION_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Debit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "DEBIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Credit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "CREDIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Document Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DOCUMENT_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "External Document No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXTERNAL_DOCUMENT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Source Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SOURCE_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Source No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOURCE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "No_ Series",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NO_SERIES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Area Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TAX_AREA_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Liable",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "TAX_LIABLE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Group Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TAX_GROUP_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Use Tax",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "USE_TAX",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Bus_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_BUS_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Prod_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_PROD_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Additional-Currency Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADDITIONAL_CURRENCY_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_-Currency Debit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADD_CURRENCY_DEBIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_-Currency Credit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADD_CURRENCY_CREDIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Close Income Statement Dim_ ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CLOSE_INCOME_STATEMENT_DIM_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "IC Partner Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "IC_PARTNER_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Reversed",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "REVERSED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Reversed by Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "REVERSED_BY_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Reversed Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "REVERSED_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Set ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DIMENSION_SET_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Prod_ Order No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PROD_ORDER_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FA Entry Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FA_ENTRY_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "FA Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FA_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Integration Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INTEGRATION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Integration ID",
+									"type": "Guid"
+								},
+								"sink": {
+									"name": "INTEGRATION_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Date Service Completed",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "DATE_SERVICE_COMPLETED",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "GL Entry Application ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GL_ENTRY_APPLICATION_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount to Apply Jnl",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "AMOUNT_TO_APPLY_JNL",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 3 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_3_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 4 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_4_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 5 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_5_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 6 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_6_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 7 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_7_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 8 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_8_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Source Currency Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOURCE_CURRENCY_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Source Currency Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "SOURCE_CURRENCY_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Posting Order No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "POSTING_ORDER_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Accrual Account",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "ACCRUAL_ACCOUNT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "CORE Account",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CORE_ACCOUNT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Allocator Type",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CA_ALLOCATOR_TYPE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Allocator Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CA_ALLOCATOR_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "VAT_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Amount (Non Deductable)",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "VAT_AMOUNT_NON_DEDUCTABLE",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT _ (Non Deductable)",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "VAT_NON_DEDUCTABLE",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Instrument",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAS_INSTRUMENT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Sector",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAS_SECTOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Net Change",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "FAS_NET_CHANGE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "BST Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BST_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Country_Region Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COUNTRY_REGION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Full Fisc_ Doc_ No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FULL_FISC_DOC_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Goods Return Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "GOODS_RETURN_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Salespers__Purch_ Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALESPERS_PURCH_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Retail Document",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "RETAIL_DOCUMENT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Retail Cash Desk Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RETAIL_CASH_DESK_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Payment Method Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PAYMENT_METHOD_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Application Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "APPLICATION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Applies-to ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "APPLIES_TO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount to Apply",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "AMOUNT_TO_APPLY",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Open",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "OPEN",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Item Ledger Entry Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ITEM_LEDGER_ENTRY_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Tagetik GUID",
+									"type": "Guid"
+								},
+								"sink": {
+									"name": "TAGETIK_GUID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Description 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Originated from Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ORIGINATED_FROM_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "IFRS17 Transfer Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "IFRS17_TRANSFER_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_G_L_ENTRY",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Dimension Set Entry",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Dimension Set Entry]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_DIMENSION_SET_ENTRY",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Set ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DIMENSION_SET_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Value ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DIMENSION_VALUE_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_DIMENSION_SET_ENTRY",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "G_L Account",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$G_L Account]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_G_L_ACCOUNT",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Search Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEARCH_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Account Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ACCOUNT_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Global Dimension 1 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOBAL_DIMENSION_1_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Global Dimension 2 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOBAL_DIMENSION_2_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Income_Balance",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "INCOME_BALANCE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Debit_Credit",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DEBIT_CREDIT",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "No_ 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NO_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Blocked",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "BLOCKED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Direct Posting",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DIRECT_POSTING",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Reconciliation Account",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "RECONCILIATION_ACCOUNT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "New Page",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "NEW_PAGE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "No_ of Blank Lines",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "NO_OF_BLANK_LINES",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Indentation",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "INDENTATION",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Date Modified",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "LAST_DATE_MODIFIED",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Consol_ Translation Method",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CONSOL_TRANSLATION_METHOD",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Consol_ Debit Acc_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONSOL_DEBIT_ACC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Consol_ Credit Acc_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONSOL_CREDIT_ACC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Posting Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "GEN_POSTING_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Bus_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GEN_BUS_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Gen_ Prod_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GEN_PROD_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Picture",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "PICTURE",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Automatic Ext_ Texts",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "AUTOMATIC_EXT_TEXTS",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Area Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TAX_AREA_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Liable",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "TAX_LIABLE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Tax Group Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TAX_GROUP_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Bus_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_BUS_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Prod_ Posting Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_PROD_POSTING_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Exchange Rate Adjustment",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "EXCHANGE_RATE_ADJUSTMENT",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Default IC Partner G_L Acc_ No",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DEFAULT_IC_PARTNER_G_L_ACC_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Omit Default Descr_ in Jnl_",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "OMIT_DEFAULT_DESCR_IN_JNL",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Cost Type No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COST_TYPE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Default Deferral Template Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DEFAULT_DEFERRAL_TEMPLATE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Account Type Z_N",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ACCOUNT_TYPE_Z_N",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Foreign Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FOREIGN_DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Source Mandatory",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "SOURCE_MANDATORY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Posting Forbidden",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "POSTING_FORBIDDEN",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Cost Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COST_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "IFRS Account Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "IFRS_ACCOUNT_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Accrual Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACCRUAL_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Accrual Bal_ Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACCRUAL_BAL_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Accrual Account",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "ACCRUAL_ACCOUNT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Class 9",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CLASS_9",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Allocator Required",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "CA_ALLOCATOR_REQUIRED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "New Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NEW_ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Instrument",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAS_INSTRUMENT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Sector",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAS_SECTOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Instrument Posting",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FAS_INSTRUMENT_POSTING",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Sector Posting",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FAS_SECTOR_POSTING",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Account",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "FAS_ACCOUNT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Net Change",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "FAS_NET_CHANGE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "BST Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BST_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Net Change Posting",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "FAS_NET_CHANGE_POSTING",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "BST Check",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "BST_CHECK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "BST Posting",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "BST_POSTING",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Long Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LONG_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Master Data Status",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "MASTER_DATA_STATUS",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Closing Account",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "CLOSING_ACCOUNT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_G_L_ACCOUNT",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Analysis View",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Analysis View]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_ANALYSIS_VIEW",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Account Source",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ACCOUNT_SOURCE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "LAST_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Budget Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "LAST_BUDGET_ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Date Updated",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "LAST_DATE_UPDATED",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Update on Posting",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "UPDATE_ON_POSTING",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Blocked",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "BLOCKED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Account Filter",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACCOUNT_FILTER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Business Unit Filter",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BUSINESS_UNIT_FILTER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Starting Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "STARTING_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Date Compression",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DATE_COMPRESSION",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 1 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_1_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 2 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_2_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 3 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_3_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 4 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_4_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Include Budgets",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "INCLUDE_BUDGETS",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Refresh When Unblocked",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "REFRESH_WHEN_UNBLOCKED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Dim_ 1 From G_L Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DIM_1_FROM_G_L_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Dim_ 2 From G_L Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DIM_2_FROM_G_L_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Dim_ 3 From G_L Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DIM_3_FROM_G_L_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Dim_ 4 From G_L Entry",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DIM_4_FROM_G_L_ENTRY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Anal_ View",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "CA_ANAL_VIEW",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Dim_ to Transfer",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CA_DIM_TO_TRANSFER",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Dimension Trans_ Filter",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CA_DIMENSION_TRANS_FILTER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_ANALYSIS_VIEW",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Dimension",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Dimension]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_DIMENSION",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Code Caption",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODE_CAPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Filter Caption",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FILTER_CAPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Blocked",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "BLOCKED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Consolidation Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONSOLIDATION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Map-to IC Dimension Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MAP_TO_IC_DIMENSION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Start Usage Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "START_USAGE_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "End Usage Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "END_USAGE_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_DIMENSION",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Contact",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Contact]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_CONTACT",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Search Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEARCH_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Address",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ADDRESS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Address 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ADDRESS_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "City",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CITY",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Phone No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PHONE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Telex No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEX_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Territory Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TERRITORY_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Currency Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CURRENCY_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Language Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LANGUAGE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Salesperson Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALESPERSON_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Country_Region Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COUNTRY_REGION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Date Modified",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "LAST_DATE_MODIFIED",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Fax No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAX_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Telex Answer Back",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TELEX_ANSWER_BACK",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Registration No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_REGISTRATION_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Picture",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "PICTURE",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Post Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "POST_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "County",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COUNTY",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "E-Mail",
+									"type": "String"
+								},
+								"sink": {
+									"name": "E_MAIL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Home Page",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HOME_PAGE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "No_ Series",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NO_SERIES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Company No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COMPANY_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Company Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COMPANY_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Lookup Contact No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LOOKUP_CONTACT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "First Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FIRST_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Middle Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MIDDLE_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Surname",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SURNAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Job Title",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_TITLE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Initials",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INITIALS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Extension No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXTENSION_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Mobile Phone No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MOBILE_PHONE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Pager",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PAGER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Organizational Level Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ORGANIZATIONAL_LEVEL_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Exclude from Segment",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "EXCLUDE_FROM_SEGMENT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "External ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXTERNAL_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Correspondence Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CORRESPONDENCE_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Salutation Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALUTATION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Search E-Mail",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEARCH_E_MAIL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Last Time Modified",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "LAST_TIME_MODIFIED",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "E-Mail 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "E_MAIL_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Forced Employee No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FORCED_EMPLOYEE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CORE Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CORE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AdUsername",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ADUSERNAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EMSO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EMSO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SM Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SM_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Worker Reg_ Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "WORKER_REG_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "KIS Registration No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "KIS_REGISTRATION_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Superior KIS Reg_ No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUPERIOR_KIS_REG_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Old 2011 Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "OLD_2011_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Person Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "PERSON_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "PIO Id",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PIO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Imported From PSIT",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "IMPORTED_FROM_PSIT",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "VAT Registration No_ 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VAT_REGISTRATION_NO_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Registration No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGISTRATION_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Registration No_ 2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGISTRATION_NO_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Customer Template No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CUSTOMER_TEMPLATE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Vendor Template No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VENDOR_TEMPLATE_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Forced Customer No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FORCED_CUSTOMER_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Forced Vendor No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FORCED_VENDOR_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FAS Sector",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FAS_SECTOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "External No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXTERNAL_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_CONTACT",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Dimension Value",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Dimension Value]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_DIMENSION_VALUE",
+							"type": "Expression"
+						},
+						"writeBehavior": "Insert"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Value Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DIMENSION_VALUE_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Blocked",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "BLOCKED",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Consolidation Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CONSOLIDATION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Indentation",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "INDENTATION",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Global Dimension No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "GLOBAL_DIMENSION_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Map-to IC Dimension Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MAP_TO_IC_DIMENSION_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Map-to IC Dimension Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MAP_TO_IC_DIMENSION_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension Value ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DIMENSION_VALUE_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Start Usage Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "START_USAGE_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "End Usage Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "END_USAGE_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Partner Group",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PARTNER_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sort Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SORT_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MA Grouping Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MA_GROUPING_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Hidden",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "HIDDEN",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Dimension No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CA_DIMENSION_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_DIMENSION_VALUE",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Analysis View Entry",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Analysis View Entry]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_ANALYSIS_VIEW_ENTRY\n",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Analysis View Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ANALYSIS_VIEW_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Account No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACCOUNT_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Account Source",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ACCOUNT_SOURCE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 1 Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_1_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 2 Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_2_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 3 Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_3_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 4 Value Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_4_VALUE_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Business Unit Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BUSINESS_UNIT_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Posting Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "POSTING_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Entry No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ENTRY_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Cash Flow Forecast No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CASH_FLOW_FORECAST_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Allocator Type",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CA_ALLOCATOR_TYPE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Transfer Intercompany",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "CA_TRANSFER_INTERCOMPANY",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Debit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "DEBIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Credit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "CREDIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_-Curr_ Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADD_CURR_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_-Curr_ Debit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADD_CURR_DEBIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "Add_-Curr_ Credit Amount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "ADD_CURR_CREDIT_AMOUNT",
+									"type": "Decimal"
+								}
+							},
+							{
+								"source": {
+									"name": "CA Allocator Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CA_ALLOCATOR_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_ANALYSIS_VIEW_ENTRY",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Acc_ Schedule Line",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "SELECT *, GETDATE() AS COMMIT_TIME FROM dbo.[@{pipeline().parameters.entity}$Acc_ Schedule Line]",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"preCopyScript": {
+							"value": "TRUNCATE TABLE @{pipeline().parameters.schema}.DBO_@{pipeline().parameters.entity}_ACC_SCHEDULE_LINE",
+							"type": "Expression"
+						},
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ah_ADLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "nav/stg"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "Byte[]"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "Byte[]"
+								}
+							},
+							{
+								"source": {
+									"name": "Schedule Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SCHEDULE_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Line No_",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "LINE_NO",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Row No_",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ROW_NO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Totaling Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TOTALING_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "New Page",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "NEW_PAGE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Show",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SHOW",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 1 Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_1_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 2 Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_2_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 3 Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_3_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Dimension 4 Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIMENSION_4_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Bold",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "BOLD",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Italic",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "ITALIC",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Underline",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "UNDERLINE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Show Opposite Sign",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "SHOW_OPPOSITE_SIGN",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Row Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ROW_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount Type",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "AMOUNT_TYPE",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Double Underline",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "DOUBLE_UNDERLINE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Cost Center Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COST_CENTER_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Cost Object Totaling",
+									"type": "String"
+								},
+								"sink": {
+									"name": "COST_OBJECT_TOTALING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Exclude Closing Entries",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "EXCLUDE_CLOSING_ENTRIES",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Row Logic Type (Tagetik)",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ROW_LOGIC_TYPE_TAGETIK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "GL Account No_ (Tagetik)",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GL_ACCOUNT_NO_TAGETIK",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Segment (Tagetik)",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEGMENT_TAGETIK",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount Logic (Tagetik)",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "AMOUNT_LOGIC_TAGETIK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Analytical IC (Tagetik)",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "ANALYTICAL_IC_TAGETIK",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Always Show from G_L",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "ALWAYS_SHOW_FROM_G_L",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Export To File",
+									"type": "Byte"
+								},
+								"sink": {
+									"name": "EXPORT_TO_FILE",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "COMMIT_TIME",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_nav",
+						"type": "DatasetReference",
+						"parameters": {
+							"sqlserver": {
+								"value": "@pipeline().globalParameters.nav_server_old",
+								"type": "Expression"
+							},
+							"database": {
+								"value": "@pipeline().parameters.database",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.user",
+								"type": "Expression"
+							},
+							"secret": {
+								"value": "@pipeline().parameters.secret",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_nav_syn",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							},
+							"tableName": {
+								"value": "DBO_@{pipeline().parameters.entity}_ACC_SCHEDULE_LINE",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"database": {
+				"type": "string",
+				"defaultValue": "TOSA"
+			},
+			"user": {
+				"type": "string",
+				"defaultValue": "TOSADWH"
+			},
+			"secret": {
+				"type": "string",
+				"defaultValue": "NAVI-TOSA-tosadwh-test"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "TOSA_LAND_NAV"
+			},
+			"entity": {
+				"type": "string",
+				"defaultValue": "TOSA"
+			}
+		},
+		"variables": {
+			"Column_names": {
+				"type": "String"
+			},
+			"TransformedColumnName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "EX_DW_DM/ADM/EX/NAVISION_TO_DWH_LAND"
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-01-08T15:49:43Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
